@@ -1,9 +1,9 @@
-##para rodar basta usar: docker compose --file infra/compose.yaml  up
-
 services:
   database:
     image: postgres:16.10-alpine3.22
-    env_file:
-      - .env
+    environment:
+      POSTGRES_PASSWORD: "local_password"
+      POSTGRES_USER: "local_user"
+      POSTGRES_DB: "local_db"
     ports:
       - "5432:5432"
