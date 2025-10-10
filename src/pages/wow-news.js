@@ -29,20 +29,50 @@ export default function WowNews() {
         </p>
       </header>
 
-      {loading && <p className="text-slate-300">Carregando...</p>}
+      {loading && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div
+              key={i}
+              className="bg-slate-800 rounded-lg p-4 shadow-lg border border-slate-700 animate-pulse flex flex-col gap-3"
+            >
+              <div className="h-40 bg-slate-700 rounded w-full mb-2" />
+              <div className="h-6 bg-slate-700 rounded w-3/4" />
+              <div className="h-4 bg-slate-700 rounded w-full" />
+              <div className="h-4 bg-slate-700 rounded w-2/3" />
+              <div className="flex justify-between mt-2">
+                <div className="h-3 w-1/4 bg-slate-700 rounded" />
+                <div className="h-3 w-1/6 bg-slate-700 rounded" />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
       {error && <p className="text-red-400">Erro: {error}</p>}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {items.map((item) => (
           <article
             key={item.id}
-            className="bg-slate-800 rounded-lg p-4 shadow-lg border border-slate-700"
+            className="bg-slate-800 rounded-lg p-4 shadow-lg border border-slate-700 flex flex-col"
           >
-            <h2 className="text-xl font-semibold text-white mb-2">
+            {item.image && (
+              <img
+                src={item.image}
+                alt={item.title}
+                className="w-full h-40 object-cover rounded mb-2 border border-slate-700"
+                loading="lazy"
+                style={{ background: "#222" }}
+                onError={(e) => {
+                  e.target.style.display = "none";
+                }}
+              />
+            )}
+            <h2 className="text-xl font-semibold text-white mb-2 line-clamp-2">
               {item.title}
             </h2>
-            <p className="text-slate-300 mb-3">{item.summary}</p>
-            <div className="flex items-center justify-between text-sm text-slate-400">
+            <p className="text-slate-300 mb-3 line-clamp-3">{item.summary}</p>
+            <div className="flex items-center justify-between text-sm text-slate-400 mt-auto">
               <time>
                 {item.date ? new Date(item.date).toLocaleString() : ""}
               </time>
