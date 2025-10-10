@@ -1,4 +1,4 @@
-import database from "infra/database";
+const database = require("../../../../infra/database.js");
 
 async function status(request, response) {
   try {
@@ -19,4 +19,4 @@ async function status(request, response) {
   }
 }
 
-export default status;
+module.exports = status;

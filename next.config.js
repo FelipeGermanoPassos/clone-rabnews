@@ -7,6 +7,22 @@ const nextConfig = {
     POSTGRES_PASSWORD: process.env.POSTGRES_PASSWORD,
     POSTGRES_DB: process.env.POSTGRES_DB,
   },
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: "/api/:path*",
+      },
+    ];
+  },
+  async headers() {
+    return [
+      {
+        source: "/api/:path*",
+        headers: [{ key: "Access-Control-Allow-Origin", value: "*" }],
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;
