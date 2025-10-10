@@ -1,4 +1,4 @@
-const database = require("../../../../infra/database.js");
+const database = require("../../../../services/database.js");
 
 async function status(request, response) {
   try {

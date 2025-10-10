@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  pageExtensions: ["js", "jsx", "ts", "tsx"],
+  distDir: ".next",
   env: {
     POSTGRES_HOST: process.env.POSTGRES_HOST,
     POSTGRES_PORT: process.env.POSTGRES_PORT,

@@ -1,4 +1,4 @@
-const handler = require("../../../../../pages/api/v1/status/status");
+const handler = require("../../../../../src/pages/api/v1/status/status");
 const { createRequest, createResponse } = require("node-mocks-http");
 require("dotenv").config({ path: ".env.test" });
 
