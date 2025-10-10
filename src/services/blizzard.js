@@ -8,6 +8,14 @@ const regionHost = {
   tw: "https://tw.api.blizzard.com",
 };
 
+// Simple in-memory cache
+const cache = {
+  token: null,
+  tokenExpiry: 0,
+  news: null,
+  newsExpiry: 0,
+};
+
 async function getAccessToken() {
   const clientId = process.env.BLIZZARD_CLIENT_ID;
   const clientSecret = process.env.BLIZZARD_CLIENT_SECRET;
@@ -17,9 +25,14 @@ async function getAccessToken() {
       "Blizzard API credentials not set in env (BLIZZARD_CLIENT_ID / BLIZZARD_CLIENT_SECRET)",
     );
   }
-
   const tokenUrl = `https://${region}.battle.net/oauth/token`;
   const basic = Buffer.from(`${clientId}:${clientSecret}`).toString("base64");
+
+  // Return cached token if still valid
+  const now = Date.now();
+  if (cache.token && cache.tokenExpiry > now) {
+    return { token: cache.token, region };
+  }
 
   const res = await fetch(tokenUrl, {
     method: "POST",
@@ -36,6 +49,9 @@ async function getAccessToken() {
   }
 
   const data = await res.json();
+  // cache token
+  cache.token = data.access_token;
+  cache.tokenExpiry = Date.now() + (data.expires_in - 30) * 1000; // refresh slightly earlier
   return { token: data.access_token, expires_in: data.expires_in, region };
 }
 
@@ -48,8 +64,17 @@ async function fetchWowNews() {
   // A Blizzard muda endpoints, e pode precisar de namespace e locale.
   // Vamos tentar um endpoint genérico e tratar erros.
   try {
+    // Check cache for news
+    const ttl =
+      parseInt(process.env.BLIZZARD_CACHE_TTL_SECONDS || "300", 10) * 1000;
+    const now = Date.now();
+    if (cache.news && cache.newsExpiry > now) {
+      return cache.news;
+    }
+
     const { token } = await getAccessToken();
-    const url = `${host}/news/wow?locale=en_US`; // pode ajustar locale via env
+    const locale = process.env.BLIZZARD_LOCALE || "en_US";
+    const url = `${host}/news/wow?locale=${locale}`;
     const res = await fetch(url, {
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -60,12 +85,19 @@ async function fetchWowNews() {
     }
 
     const json = await res.json();
-    // Retornar raw por enquanto; o route handler formatará
+    // cache result
+    cache.news = json;
+    cache.newsExpiry = Date.now() + ttl;
     return json;
   } catch (err) {
     // Propagar erro
     throw err;
   }
+}
+
+// Exported helper that explicitly uses cache
+async function fetchWowNewsWithCache() {
+  return fetchWowNews();
 }
 
 module.exports = {
