@@ -21,44 +21,42 @@ export default function WowNews() {
   }, []);
 
   return (
-    <div style={{ fontFamily: "Inter, Arial, sans-serif", padding: 24 }}>
-      <h1>WoW News</h1>
-      {loading && <p>Carregando...</p>}
-      {error && <p style={{ color: "crimson" }}>Erro: {error}</p>}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
-          gap: 16,
-          marginTop: 16,
-        }}
-      >
+    <div className="max-w-6xl mx-auto p-6">
+      <header className="flex items-center justify-between mb-6">
+        <h1 className="text-3xl font-bold text-amber-300">WoW News</h1>
+        <p className="text-sm text-slate-300">
+          Últimas notícias e atualizações
+        </p>
+      </header>
+
+      {loading && <p className="text-slate-300">Carregando...</p>}
+      {error && <p className="text-red-400">Erro: {error}</p>}
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {items.map((item) => (
           <article
             key={item.id}
-            style={{
-              border: "1px solid #333",
-              borderRadius: 8,
-              padding: 12,
-              background: "#0b1020",
-              color: "#fff",
-            }}
+            className="bg-slate-800 rounded-lg p-4 shadow-lg border border-slate-700"
           >
-            <h2 style={{ fontSize: "1.1rem" }}>{item.title}</h2>
-            <p style={{ color: "#ccc" }}>{item.summary}</p>
-            <p style={{ fontSize: 12, color: "#999" }}>
-              {item.date ? new Date(item.date).toLocaleString() : ""}
-            </p>
-            {item.url && (
-              <a
-                href={item.url}
-                target="_blank"
-                rel="noreferrer"
-                style={{ color: "#7fb1ff" }}
-              >
-                Leia mais
-              </a>
-            )}
+            <h2 className="text-xl font-semibold text-white mb-2">
+              {item.title}
+            </h2>
+            <p className="text-slate-300 mb-3">{item.summary}</p>
+            <div className="flex items-center justify-between text-sm text-slate-400">
+              <time>
+                {item.date ? new Date(item.date).toLocaleString() : ""}
+              </time>
+              {item.url && (
+                <a
+                  href={item.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-amber-300 hover:underline"
+                >
+                  Leia mais
+                </a>
+              )}
+            </div>
           </article>
         ))}
       </div>

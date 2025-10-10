@@ -1,11 +1,14 @@
+// Mock the database service to avoid real DB calls during tests
+jest.mock("src/services/database", () => ({
+  query: jest.fn(() => Promise.resolve({ rows: [{ sum: 2 }] })),
+}));
+
 const handler = require("src/pages/api/v1/status/status");
 const { createRequest, createResponse } = require("node-mocks-http");
 require("dotenv").config({ path: "config/.env.test" });
 
 test("GET /api/v1/status should return 200", async () => {
-  const req = createRequest({
-    method: "GET",
-  });
+  const req = createRequest({ method: "GET" });
   const res = createResponse();
 
   await handler(req, res);

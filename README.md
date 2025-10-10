@@ -1,7 +1,3 @@
-# clone-rabnews
-
-Um projeto para criar uma pagina aonde tenha noticias de jogos com foco em mostrar a realidade dos jogos, seja ele crypto ou não
-
 ## WoW News (integração com Blizzard API)
 
 Este repositório agora inclui um exemplo de integração com a API da Blizzard (Battle.net) para recuperar
