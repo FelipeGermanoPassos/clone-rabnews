@@ -1,6 +1,6 @@
-const handler = require("../../../../../src/pages/api/v1/status/status");
+const handler = require("src/pages/api/v1/status/status");
 const { createRequest, createResponse } = require("node-mocks-http");
-require("dotenv").config({ path: ".env.test" });
+require("dotenv").config({ path: "config/.env.test" });
 
 test("GET /api/v1/status should return 200", async () => {
   const req = createRequest({

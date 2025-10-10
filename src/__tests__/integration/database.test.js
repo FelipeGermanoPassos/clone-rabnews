@@ -1,5 +1,5 @@
 const { Client } = require("pg");
-require("dotenv").config({ path: ".env.test" });
+require("dotenv").config({ path: "config/.env.test" });
 
 test("should connect to PostgreSQL", async () => {
   const client = new Client({
